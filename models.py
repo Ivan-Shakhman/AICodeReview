@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class ReviewBody:
+class ReviewBodyBase(BaseModel):
     assignment_description: str
     git_repo_url: str
     open_api_key: str

@@ -1,18 +1,15 @@
-class CandidateLevelError(Exception):
+class BaseCustomException(Exception):
+    def __init__(self, message: str):
+        self.message = message
+
+
+class CandidateLevelError(BaseCustomException):
     pass
 
 
-class DescriptionSizeError(Exception):
+class DescriptionError(BaseCustomException):
     pass
 
 
-class ValidCharactersError(Exception):
-    pass
-
-
-class LengthError(Exception):
-    pass
-
-
-class GitHubDomainError(Exception):
+class GitHubDomainError(BaseCustomException):
     pass
