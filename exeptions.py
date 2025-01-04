@@ -1,0 +1,4 @@
+class CandidateLevelError(Exception):
+    pass
+
+
