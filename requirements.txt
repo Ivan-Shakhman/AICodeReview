@@ -5,3 +5,5 @@ alembic
 httpx
 pytest
 fastapi[standart]
+openai
+python-dotenv

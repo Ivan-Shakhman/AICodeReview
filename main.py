@@ -7,6 +7,7 @@ from handlers import candidate_level_error_handler, description_error_handler, g
 from models import ReviewBodyBase
 from validators import assignment_description_is_valid, candidate_level_is_valid, git_url_is_valid
 
+
 app = FastAPI()
 
 app.add_exception_handler(CandidateLevelError, candidate_level_error_handler)
