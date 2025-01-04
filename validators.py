@@ -1,7 +1,8 @@
-from exeptions import CandidateLevelError
+from exeptions import CandidateLevelError, ValidCharactersError, LengthError, GitHubDomainError
+import re
 
 
-def validate_candidate_level(level: str) -> bool:
+def candidate_level_is_valid(level: str) -> bool:
     if type(level) is not str:
         raise TypeError(f"Type of level is {type(level)} but must be str!")
     if level not in["Junior", "Middle", "Senior"]:
@@ -11,8 +12,29 @@ def validate_candidate_level(level: str) -> bool:
     return True
 
 
+def assignment_description_is_valid(description: str) -> bool:
+    pattern = r"^[a-zA-Z\[\],.!?\(\)@#%:;\"']+$"
+
+    if not bool(re.match(pattern, description)):
+        raise ValidCharactersError(
+            "The text contains invalid characters! Use only latin a-z A-Z, and next symbols: [],.!?()@#%:;\"'"
+        )
+
+    if len(description) > 2500:
+        raise LengthError("Max length of description must be 2500 symbols")
+
+    return True
+
+
+def git_url_is_valid(url: str):
+    base_url = "https://github.com"
+    if not url.startswith(base_url):
+        raise GitHubDomainError(f"url must start with {base_url}")
+
+
+
 if __name__ == "__main__":
-    print(validate_candidate_level("Junior"))
-    print(validate_candidate_level("Middle"))
-    print(validate_candidate_level("Senior"))
-    print(validate_candidate_level([1, 2, 3]))
+    print(candidate_level_is_valid("Junior"))
+    print(candidate_level_is_valid("Middle"))
+    print(candidate_level_is_valid("Senior"))
+    print(candidate_level_is_valid([1, 2, 3]))
