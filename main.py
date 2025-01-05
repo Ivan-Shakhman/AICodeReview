@@ -2,7 +2,11 @@ from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from repo_extractor import download_all_branches
 from engine import SessionLocal
-from exeptions import CandidateLevelError, DescriptionError, GitHubDomainError
+from exeptions import (
+    CandidateLevelError,
+    DescriptionError,
+    GitHubDomainError
+)
 from handlers import (
     candidate_level_error_handler,
     description_error_handler,
@@ -15,6 +19,10 @@ from validators import (
     git_url_is_valid,
 )
 from openai_worker import analyze_repo
+import logging
+
+
+logger = logging.getLogger("uvicorn")
 
 app = FastAPI()
 """add handlers to app"""
@@ -47,15 +55,21 @@ async def title_screen():
 
 @app.post("/")
 async def make_code_review(review_input: ReviewBodyBase):
-    assignment_description_is_valid(review_input.assignment_description)
-    candidate_level_is_valid(review_input.candidate_level)
-    if git_url_is_valid(review_input.git_repo_url):
+    if all(
+            (
+            git_url_is_valid(review_input.git_repo_url),
+            assignment_description_is_valid(review_input.assignment_description),
+            candidate_level_is_valid(review_input.candidate_level)
+            )
+    ):
+        logger.info("Validate successfully")
         download_all_branches(review_input.git_repo_url)
         result = analyze_repo(
             description=review_input.assignment_description,
             level=review_input.candidate_level,
             api_key=review_input.open_api_key
         )
-        print(result)
+        logger.info("Response is success 200 OK")
         return {"Review": result}
+    logger.error("External Server ERROR 500")
     return {"Error!": "Something goings wrong("}
