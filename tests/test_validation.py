@@ -79,5 +79,6 @@ def test_candidate_level_logging(mock_logger):
     level = "Invalid"
     with pytest.raises(CandidateLevelError):
         candidate_level_is_valid(level)
-    mock_logger.error.assert_called_with(f"The candidate's level must be equal to one of: Junior, Middle, Senior but was {level}!")
-
+    mock_logger.error.assert_called_with(
+        f"The candidate's level must be equal to one of: Junior, Middle, Senior but was {level}!"
+    )
