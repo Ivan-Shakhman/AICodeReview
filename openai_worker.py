@@ -1,14 +1,23 @@
 import os
 from openai import OpenAI
 from utils import is_valid_file
+import logging
+
+
+logger = logging.getLogger("uvicorn")
 
 
 def analyze_file(file_path):
+    logger.info("Start analyze a file")
+
     try:
         with open(file_path, "r", encoding="utf-8-sig", errors="ignore") as f:
+            logger.info("Success.")
             return f.read()
+
     except Exception as e:
-        print(f"Can't read the file {file_path}: {e}")
+        logger.error(f"Can't read the file {file_path}: {e}")
+
         return ""
 
 
@@ -19,6 +28,8 @@ def analyze_repo(
     repo_dir: str = "downloaded_repo",
 
 ):
+    logger.info("Start analyze repository...")
+
     all_files_content = ""
 
     for root, dirs, files in os.walk(repo_dir):
@@ -27,12 +38,13 @@ def analyze_repo(
         for file in files:
             if is_valid_file(file):
                 file_path = os.path.join(root, file)
-                print(f"Analise of file: {file_path}")
+                logger.info(f"Analise of file: {file_path}")
                 all_files_content += f"\n\n--- File: {file_path} ---\n"
                 all_files_content += analyze_file(file_path)
+            else:
+                logger.error("Invalid file format")
 
     client = OpenAI(api_key=api_key)
-
     prompt = (
         f" Analyze the following project, here is a short description{description} "
         f"(keep in mind that I am a level developer {level} level)"
