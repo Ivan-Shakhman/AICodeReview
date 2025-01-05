@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from repo_extractor import download_all_branches
@@ -70,6 +72,7 @@ async def make_code_review(review_input: ReviewBodyBase):
             api_key=review_input.open_api_key
         )
         logger.info("Response is success 200 OK")
+        os.rmdir("./downloaded_repo")
         return {"Review": result}
     logger.error("External Server ERROR 500")
     return {"Error!": "Something goings wrong("}
