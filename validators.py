@@ -11,9 +11,11 @@ def candidate_level_is_valid(level: str) -> bool:
         raise CandidateLevelError(message="Level must be not empty!")
 
     if type(level) is not str:
-        raise CandidateLevelError(message=f"Type of level is {type(level)} but must be str!")
+        raise CandidateLevelError(
+            message=f"Type of level is {type(level)} but must be str!"
+        )
 
-    if level not in["Junior", "Middle", "Senior"]:
+    if level not in ["Junior", "Middle", "Senior"]:
         raise CandidateLevelError(
             message=f"The candidate's level must be equal to one of: Junior, Middle, Senior but was {level}!"
         )
@@ -22,7 +24,7 @@ def candidate_level_is_valid(level: str) -> bool:
 
 
 def assignment_description_is_valid(description: str) -> bool:
-    pattern = r"^[a-zA-Z\[\],.!?\(\)@#%:;\"']+$"
+    pattern = r"^[a-zA-Z\[\],.!?\(\)@%:;\"'\s]+$"
 
     if not description:
         raise DescriptionError(message="Description must be not empty!")
@@ -40,16 +42,14 @@ def assignment_description_is_valid(description: str) -> bool:
 
 def git_url_is_valid(url: str) -> bool:
     base_url = "https://github.com/"
+    exc = ".git"
 
     if not url:
         raise GitHubDomainError(message="url must be not empty!")
 
     if not url.startswith(base_url):
-        raise GitHubDomainError(message=f"url must start with {base_url}")
+        raise GitHubDomainError(message=f"url must start with {base_url}!")
 
+    if not url.endswith(exc):
+        raise GitHubDomainError(message=f"url must end with {exc}!")
     return True
-
-
-
-if __name__ == "__main__":
-    pass

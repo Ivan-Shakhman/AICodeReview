@@ -1,3 +1,6 @@
+"""Custom exceptions for readability in logging"""
+
+
 class BaseCustomException(Exception):
     def __init__(self, message: str):
         self.message = message
