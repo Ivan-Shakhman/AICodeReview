@@ -30,7 +30,7 @@ def candidate_level_is_valid(level: str) -> bool:
 
 
 def assignment_description_is_valid(description: str) -> bool:
-    pattern = r"^[a-zA-Z\[\],.!?\(\)@%:;\"'\s]+$"
+    pattern = r"^[a-zA-Z\[\],.!?\(\)@%:;\"'\s-]+$"
     logger.info("Validate assignment description")
     if not description:
         logger.error("Description must be not empty!")
@@ -64,4 +64,5 @@ def git_url_is_valid(url: str) -> bool:
     if not url.endswith(exc):
         logger.error(f"url must end with {exc}!")
         raise GitHubDomainError(message=f"url must end with {exc}!")
+    logger.info("Success.")
     return True

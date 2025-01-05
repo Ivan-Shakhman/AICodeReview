@@ -1,9 +1,8 @@
 import os
-
+from engine import SessionLocal
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from repo_extractor import download_all_branches
-from engine import SessionLocal
 from exeptions import (
     CandidateLevelError,
     DescriptionError,
@@ -27,6 +26,7 @@ import logging
 logger = logging.getLogger("uvicorn")
 
 app = FastAPI()
+
 """add handlers to app"""
 app.add_exception_handler(CandidateLevelError, candidate_level_error_handler)
 app.add_exception_handler(DescriptionError, description_error_handler)
@@ -72,7 +72,6 @@ async def make_code_review(review_input: ReviewBodyBase):
             api_key=review_input.open_api_key
         )
         logger.info("Response is success 200 OK")
-        os.rmdir("./downloaded_repo")
         return {"Review": result}
-    logger.error("External Server ERROR 500")
-    return {"Error!": "Something goings wrong("}
+
+    logger.error("Client error 400. Invalid input data!")
