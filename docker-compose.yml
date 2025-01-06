@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "fastapi run"
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    environment:
+      - GITHUBAPIKEY=${GITHUBAPIKEY}
